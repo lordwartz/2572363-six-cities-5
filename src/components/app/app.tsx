@@ -7,17 +7,18 @@ import Offer from '../../pages/offer/offer.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
+import {Offers} from '../../types/offer.ts';
 
 type AppProps = {
-  placesCount: number;
+  places: Offers;
 };
 
-export default function App({ placesCount }: AppProps) {
+export default function App({ places }: AppProps) {
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Main placesCount={placesCount} />} />
+          <Route index element={<Main placesCount={places.length} />} />
           <Route path={AppRoute.Login} element={<Login />} />
           <Route
             path={AppRoute.Favorites}
