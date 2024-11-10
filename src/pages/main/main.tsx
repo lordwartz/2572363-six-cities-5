@@ -1,4 +1,5 @@
 import PlaceCard from '../../components/place-card/place-card.tsx';
+import {Helmet} from 'react-helmet-async';
 
 type MainProps = {
   placesCount: number;
@@ -11,6 +12,9 @@ export default function Main ({ placesCount } : MainProps) {
 
   return (
     <section>
+      <Helmet>
+        <title>6 cities</title>
+      </Helmet>
       <div className="page page--gray page--main">
         <header className="header">
           <div className="container">
