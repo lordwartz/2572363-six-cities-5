@@ -1,14 +1,33 @@
 import {Reviews} from './review.ts';
+import {Amenities} from './amenities.ts';
 
 export type Coordinates = [string, string];
 
+export enum OfferType {
+  Apartment = 'apartment',
+  Room = 'room',
+  House = 'house',
+  Hotel = 'hotel',
+}
+
 export type Offer = {
-  src: string;
-  name: string;
-  rating: number;
+  id: number;
+  image: string;
+  isPremium: boolean;
+  pricePerNight: number;
+  title: string;
+  type: OfferType;
   isFavorite: boolean;
-  coordinates: Coordinates;
-  reviews: Reviews;
+  rating: number;
 };
+
+export type DetailedOffer = Offer & {
+  reviews: Reviews;
+  images: string[];
+  description: string;
+  bedroomsCount: number;
+  naxCapacity: number;
+  amenities: Amenities;
+}
 
 export type Offers = Offer[];
