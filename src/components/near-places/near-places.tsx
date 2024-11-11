@@ -1,29 +1,16 @@
 import {Offer, Offers} from '../../types/offer.ts';
-import {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-export type PlaceCardProps = {
+export type NearPlaceProps = {
   offer: Offer;
-  handleHovered: (id: number) => void;
 }
 
-export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
+export function NearPlace({ offer }: NearPlaceProps) {
   const offerLink = `/offer/${offer.id}`;
 
   return (
-    <article className="cities__card place-card"
-      onMouseEnter={() => {
-        handleHovered(offer.id);
-      }}
-      onMouseLeave={() => handleHovered(0)}
-    >
-      {offer.isPremium && (
-        <div className="place-card__mark">
-          <span>Premium</span>
-        </div>
-      )}
-
-      <div className="cities__image-wrapper place-card__image-wrapper">
+    <article className="near-places__card place-card">
+      <div className="near-places__image-wrapper place-card__image-wrapper">
         <Link to={offerLink}>
           <img className="place-card__image" src={offer.image} width="260" height="200" alt="Place image"/>
         </Link>
@@ -34,11 +21,11 @@ export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
             <b className="place-card__price-value">&euro;{offer.pricePerNight}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">To bookmarks</span>
+            <span className="visually-hidden">In bookmarks</span>
           </button>
         </div>
         <div className="place-card__rating rating">
@@ -50,27 +37,27 @@ export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
         <h2 className="place-card__name">
           <Link to={offerLink}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">Room</p>
       </div>
     </article>
   );
 }
 
-type OffersListProps = {
+export type NearPlacesProps = {
+  currentOffer: Offer;
   offers: Offers;
-}
+};
 
-export function PlaceCardsList({offers}: OffersListProps) {
-  const [, setActiveOffer] = useState(0);
+export function NearPlaces({ currentOffer, offers }: NearPlacesProps) {
+  const places = offers.filter((offer) => offer.id !== currentOffer.id)
+    .map((offer) => <NearPlace key={offer.id} offer={offer}/>);
 
   return (
-    <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer) => (
-        <PlaceCard key={offer.id}
-          offer={offer}
-          handleHovered={(id) => setActiveOffer(id)}
-        />
-      ))}
-    </div>
+    <section className="near-places places">
+      <h2 className="near-places__title">Other places in the neighbourhood</h2>
+      <div className="near-places__list places__list">
+        {places}
+      </div>
+    </section>
   );
 }
