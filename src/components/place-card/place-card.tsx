@@ -4,18 +4,18 @@ import {Link} from 'react-router-dom';
 
 export type PlaceCardProps = {
   offer: Offer;
-  onHoveredHandle: (id: number) => void;
+  handleHovered: (id: number) => void;
 }
 
-export default function PlaceCard({ offer, onHoveredHandle } : PlaceCardProps) {
+export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
   const offerLink = `/offer/${offer.id}`;
 
   return (
     <article className="cities__card place-card"
       onMouseEnter={() => {
-        onHoveredHandle(offer.id);
+        handleHovered(offer.id);
       }}
-      onMouseLeave={() => onHoveredHandle(0)}
+      onMouseLeave={() => handleHovered(0)}
     >
       {offer.isPremium && (
         <div className="place-card__mark">
@@ -68,7 +68,7 @@ export function PlaceCardsList({offers}: OffersListProps) {
       {offers.map((offer) => (
         <PlaceCard key={offer.id}
           offer={offer}
-          onHoveredHandle={(id) => setActiveOffer(id)}
+          handleHovered={(id) => setActiveOffer(id)}
         />
       ))}
     </div>

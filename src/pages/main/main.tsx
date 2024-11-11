@@ -27,7 +27,7 @@ export default function Main({ offers }: MainProps) {
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <Locations locations={Cities} onClickHandle={(city) => setLocation(city)}/>
+              <Locations locations={Cities} handleClick={(city) => setLocation(city)}/>
             </section>
           </div>
           <div className="cities">
