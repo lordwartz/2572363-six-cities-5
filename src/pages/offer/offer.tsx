@@ -1,6 +1,19 @@
 import {Helmet} from 'react-helmet-async';
+import Logo from '../../components/logo/logo.tsx';
+import {useParams} from 'react-router-dom';
+import {offers} from '../../mocks/offers.ts';
+import NotFound from '../not-found/not-found.tsx';
 
 export default function Offer() {
+  const { id } = useParams();
+
+  const parsedId = parseInt(id!, 10);
+  const currentOffer = offers.find((offer) => offer.id === parsedId);
+
+  if (!currentOffer) {
+    return <NotFound/>;
+  }
+
   return (
     <div className="page">
       <Helmet>
@@ -10,9 +23,7 @@ export default function Offer() {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
-                <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </a>
+              <Logo/>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
@@ -66,7 +77,7 @@ export default function Offer() {
               </div>
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  Beautiful &amp; luxurious studio at great location
+                  {currentOffer?.title}
                 </h1>
                 <button className="offer__bookmark-button button" type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -94,7 +105,7 @@ export default function Offer() {
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;120</b>
+                <b className="offer__price-value">&euro;{currentOffer?.pricePerNight}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">

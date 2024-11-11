@@ -1,18 +1,21 @@
 import {Offer, Offers} from '../../types/offer.ts';
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 export type PlaceCardProps = {
   offer: Offer;
-  onCardHovered: (id: number) => void;
+  onHoveredHandle: (id: number) => void;
+  onClickHandle: () => void;
 }
 
-export default function PlaceCard({ offer, onCardHovered } : PlaceCardProps) {
+export default function PlaceCard({ offer, onHoveredHandle, onClickHandle } : PlaceCardProps) {
   return (
     <article className="cities__card place-card"
       onMouseEnter={() => {
-        onCardHovered(offer.id);
+        onHoveredHandle(offer.id);
       }}
-      onMouseLeave={() => onCardHovered(0)}
+      onMouseLeave={() => onHoveredHandle(0)}
+      onClick={() => onClickHandle()}
     >
       {offer.isPremium && (
         <div className="place-card__mark">
@@ -59,10 +62,16 @@ type OffersListProps = {
 
 export function PlaceCardsList({offers}: OffersListProps) {
   const [, setActiveOffer] = useState(0);
+  const navigate = useNavigate();
+
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
-        <PlaceCard key={offer.id} offer={offer} onCardHovered={(id) => setActiveOffer(id)}/>
+        <PlaceCard key={offer.id}
+          offer={offer}
+          onHoveredHandle={(id) => setActiveOffer(id)}
+          onClickHandle={() => navigate(`/offer/${offer.id}`)}
+        />
       ))}
     </div>
   );
