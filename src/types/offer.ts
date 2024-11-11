@@ -19,6 +19,7 @@ export type Offer = {
   type: OfferType;
   isFavorite: boolean;
   rating: number;
+  location: string;
 };
 
 export type DetailedOffer = Offer & {

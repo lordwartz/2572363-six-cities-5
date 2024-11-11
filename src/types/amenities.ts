@@ -2,8 +2,7 @@ export enum Amenitie {
   Wifi= 'Wi-fi',
   Heating = 'Heating',
   Kitchen = 'Kitchen',
-  Cable = 'Cable',
-  TV = 'TV',
+  CableTV = 'Cable-TV',
 }
 
 export type Amenities = Amenitie[];

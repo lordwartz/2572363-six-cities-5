@@ -10,6 +10,7 @@ export const offers: Offers = [
     isFavorite: true,
     type: OfferType.Apartment,
     pricePerNight: 40,
+    location: 'Amsterdam',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ export const offers: Offers = [
     isFavorite: false,
     type: OfferType.Room,
     pricePerNight: 20,
+    location: 'Amsterdam',
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ export const offers: Offers = [
     isFavorite: true,
     type: OfferType.House,
     pricePerNight: 50,
+    location: 'Amsterdam',
   },
   {
     id: 4,
@@ -40,5 +43,6 @@ export const offers: Offers = [
     isFavorite: false,
     type: OfferType.Apartment,
     pricePerNight: 30,
+    location: 'Amsterdam',
   },
 ];

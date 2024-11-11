@@ -14,3 +14,12 @@ export enum AuthorizationStatus {
   Authorized = 'AUTHORIZED',
   Unknown = 'UNKNOWN',
 }
+
+export const Cities = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf',
+];
