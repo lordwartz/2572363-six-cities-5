@@ -5,5 +5,6 @@ export const reviews: Reviews = [
     author: 'John Lennon',
     rating: 5,
     text: 'Nice place!',
+    date: new Date(),
   }
 ];

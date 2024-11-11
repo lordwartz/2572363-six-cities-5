@@ -10,23 +10,23 @@ import PrivateRoute from '../private-route/private-route.tsx';
 import {Offers} from '../../types/offer.ts';
 
 type AppProps = {
-  places: Offers;
+  offers: Offers;
 };
 
-export default function App({ places }: AppProps) {
+export default function App({ offers }: AppProps) {
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Main placesCount={places.length} />} />
+          <Route index element={<Main offers={offers} />} />
           <Route path={AppRoute.Login} element={<Login />} />
           <Route
             path={AppRoute.Favorites}
             element={
               <PrivateRoute
-                authorizationStatus={AuthorizationStatus.Unauthorized}
+                authorizationStatus={AuthorizationStatus.Authorized}
               >
-                <Favorites />
+                <Favorites offers={offers.filter((offer) => offer.isFavorite)}/>
               </PrivateRoute>
             }
           />
