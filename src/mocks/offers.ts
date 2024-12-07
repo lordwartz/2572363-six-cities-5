@@ -10,7 +10,8 @@ export const offers: Offers = [
     isFavorite: true,
     type: OfferType.Apartment,
     pricePerNight: 40,
-    location: 'Amsterdam',
+    city: 'Amsterdam',
+    coordinates: {lat: 52.3909553943508, lng: 4.85309666406198},
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ export const offers: Offers = [
     isFavorite: false,
     type: OfferType.Room,
     pricePerNight: 20,
-    location: 'Amsterdam',
+    city: 'Amsterdam',
+    coordinates: {lat: 52.3609553943508, lng: 4.85309666406198},
   },
   {
     id: 3,
@@ -32,7 +34,8 @@ export const offers: Offers = [
     isFavorite: true,
     type: OfferType.House,
     pricePerNight: 50,
-    location: 'Amsterdam',
+    city: 'Amsterdam',
+    coordinates: {lat: 52.3909553943508, lng: 4.929309666406198},
   },
   {
     id: 4,
@@ -43,6 +46,7 @@ export const offers: Offers = [
     isFavorite: false,
     type: OfferType.Apartment,
     pricePerNight: 30,
-    location: 'Amsterdam',
+    city: 'Amsterdam',
+    coordinates: {lat: 52.3809553943508, lng: 4.939309666406198},
   },
 ];

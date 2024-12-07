@@ -1,7 +1,10 @@
 import {Reviews} from './review.ts';
 import {Amenities} from './amenities.ts';
 
-export type Coordinates = [string, string];
+export type Coordinates = {
+  lat: number;
+  lng: number;
+};
 
 export enum OfferType {
   Apartment = 'apartment',
@@ -19,7 +22,8 @@ export type Offer = {
   type: OfferType;
   isFavorite: boolean;
   rating: number;
-  location: string;
+  city: string;
+  coordinates: Coordinates;
 };
 
 export type DetailedOffer = Offer & {

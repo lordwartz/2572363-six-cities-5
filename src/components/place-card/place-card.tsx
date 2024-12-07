@@ -1,10 +1,9 @@
 import {Offer, Offers} from '../../types/offer.ts';
-import {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 export type PlaceCardProps = {
   offer: Offer;
-  handleHovered: (id: number) => void;
+  handleHovered: (offer: Offer) => void;
 }
 
 export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
@@ -13,9 +12,8 @@ export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
   return (
     <article className="cities__card place-card"
       onMouseEnter={() => {
-        handleHovered(offer.id);
+        handleHovered(offer);
       }}
-      onMouseLeave={() => handleHovered(0)}
     >
       {offer.isPremium && (
         <div className="place-card__mark">
@@ -58,17 +56,17 @@ export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
 
 type OffersListProps = {
   offers: Offers;
+  handleOfferHovered: (offer: Offer) => void;
 }
 
-export function PlaceCardsList({offers}: OffersListProps) {
-  const [, setActiveOffer] = useState(0);
+export function PlaceCardsList({offers, handleOfferHovered}: OffersListProps) {
 
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
         <PlaceCard key={offer.id}
           offer={offer}
-          handleHovered={(id) => setActiveOffer(id)}
+          handleHovered={(selectedOffer) => handleOfferHovered(selectedOffer)}
         />
       ))}
     </div>

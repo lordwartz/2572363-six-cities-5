@@ -23,3 +23,8 @@ export const Cities = [
   'Hamburg',
   'Dusseldorf',
 ];
+
+
+export const DEFAULT_MARKER = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
+
+export const CURRENT_MARKER = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';

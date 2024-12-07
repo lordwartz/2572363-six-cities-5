@@ -29,7 +29,7 @@ export default function Favorites({offers}: FavoritesProps) {
                   </div>
                 </div>
                 <div className="favorites__places">
-                  {<PlaceCardsList offers={offers} /> }
+                  {<PlaceCardsList offers={offers} handleOfferHovered={() => {}}/> }
                 </div>
               </li>
 
