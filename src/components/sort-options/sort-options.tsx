@@ -1,13 +1,8 @@
 import cn from 'classnames';
 import {Offers} from '../../types/offer.ts';
 import {useState} from 'react';
-
-export enum SortOption {
-  Popular = 'Popular',
-  PriceLowToHigh = 'Price: low to high',
-  PriceHighToLow = 'Price: high to low',
-  TopRatedFirst = 'Top rated first'
-}
+import {sortOffers} from '../../app/offers.api.ts';
+import {SortOption} from './sort-option.ts';
 
 type SortOptionsProps = {
   offers: Offers;
@@ -15,25 +10,6 @@ type SortOptionsProps = {
   activeSortOption: SortOption;
 }
 
-export const sortOffers = (offers: Offers, sortOption: SortOption) => {
-  const sortedOffers = [...offers];
-  switch (sortOption) {
-    case SortOption.Popular:
-      break;
-    case SortOption.PriceLowToHigh:
-      sortedOffers.sort((a, b) => a.pricePerNight - b.pricePerNight);
-      break;
-    case SortOption.PriceHighToLow:
-      sortedOffers.sort((a, b) => b.pricePerNight - a.pricePerNight);
-      break;
-    case SortOption.TopRatedFirst:
-      sortedOffers.sort((a, b) => b.rating - a.rating);
-      break;
-    default:
-      break;
-  }
-  return sortedOffers;
-};
 export default function SortOptions(props: SortOptionsProps) {
   const {offers, onSort, activeSortOption} = props;
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
@@ -57,18 +33,19 @@ export default function SortOptions(props: SortOptionsProps) {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      {isOptionsOpen && <ul className="places__options places__options--custom places__options--opened">
-        {Object.values(SortOption).map((option, index) => (
-          <li
-            key={index}
-            className={cn('places__option', { 'places__option--active': option === activeSortOption })}
-            tabIndex={0}
-            onClick={() => handleOptionClick(option)}
-          >
-            {option}
-          </li>
-        ))}
-      </ul>}
+      {isOptionsOpen && (
+        <ul className="places__options places__options--custom places__options--opened">
+          {Object.values(SortOption).map((option) => (
+            <li
+              key={option}
+              className={cn('places__option', { 'places__option--active': option === activeSortOption })}
+              tabIndex={0}
+              onClick={() => handleOptionClick(option)}
+            >
+              {option}
+            </li>
+          ))}
+        </ul>)}
     </form>
   );
 }

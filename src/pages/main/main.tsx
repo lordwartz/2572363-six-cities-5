@@ -9,8 +9,10 @@ import Map from '../../components/map/map.tsx';
 import { citiesMock } from '../../mocks/citiesMock.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCity } from '../../store/action.ts';
-import { getOffersByCity } from '../../app/offers.api.ts';
-import SortOptions, {sortOffers, SortOption} from '../../components/sort-options/sort-options.tsx';
+import {getOffersByCity, sortOffers} from '../../app/offers.api.ts';
+import SortOptions from '../../components/sort-options/sort-options.tsx';
+import {SortOption} from '../../components/sort-options/sort-option.ts';
+
 
 export default function Main() {
   const dispatch = useAppDispatch();
@@ -18,16 +20,16 @@ export default function Main() {
   const offers = useAppSelector((state) => state.offers);
   const currentOffers = getOffersByCity(city.title, offers);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
-  const [sortedOffers, setSortedOffers] = useState<Offer[]>(currentOffers);
+  const [offersToShow, setOffersToShow] = useState<Offer[]>(currentOffers);
   const [activeSortOption, setActiveSortOption] = useState<SortOption>(SortOption.Popular);
 
   useEffect(() => {
-    const sorted = sortOffers(currentOffers, activeSortOption);
-    setSortedOffers(sorted);
-  }, [city, activeSortOption]);
+    const sortedOffers = sortOffers(currentOffers, activeSortOption);
+    setOffersToShow(sortedOffers);
+  }, [city, activeSortOption, currentOffers]);
 
   const handleSort = (sortedOffers: Offers, sortOption: SortOption) => {
-    setSortedOffers(sortedOffers);
+    setOffersToShow(sortedOffers);
     setActiveSortOption(sortOption);
   };
 
@@ -49,12 +51,12 @@ export default function Main() {
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{sortedOffers.length} places to stay in {city.title}</b>
+                <b className="places__found">{offersToShow.length} places to stay in {city.title}</b>
                 <SortOptions offers={currentOffers} onSort={handleSort} activeSortOption={activeSortOption} />
-                <PlaceCardsList offers={sortedOffers} handleOfferHovered={(selectedOffer) => setCurrentOffer(selectedOffer)} />
+                <PlaceCardsList offers={offersToShow} handleOfferHovered={(selectedOffer) => setCurrentOffer(selectedOffer)} />
               </section>
               <div className="cities__right-section">
-                <Map city={city} selectedOffer={currentOffer} offers={sortedOffers} />
+                <Map city={city} selectedOffer={currentOffer} offers={offersToShow} />
               </div>
             </div>
           </div>
