@@ -1,6 +1,6 @@
 import {Helmet} from 'react-helmet-async';
 import {useParams} from 'react-router-dom';
-import {offers} from '../../mocks/offers.ts';
+import {offersMock} from '../../mocks/offers_mock.ts';
 import NotFound from '../not-found/not-found.tsx';
 import Header from '../../components/header/header.tsx';
 import {user} from '../../mocks/users.ts';
@@ -11,7 +11,7 @@ export default function Offer() {
   const { id } = useParams();
 
   const parsedId = parseInt(id!, 10);
-  const currentOffer = offers.find((offer) => offer.id === parsedId);
+  const currentOffer = offersMock.find((offer) => offer.id === parsedId);
 
   if (!currentOffer) {
     return <NotFound/>;
@@ -175,7 +175,7 @@ export default function Offer() {
           <section className="offer__map map"></section>
         </section>
         <div className="container">
-          <NearPlaces currentOffer={currentOffer} offers={offers}/>
+          <NearPlaces currentOffer={currentOffer} offers={offersMock}/>
         </div>
       </main>
     </div>

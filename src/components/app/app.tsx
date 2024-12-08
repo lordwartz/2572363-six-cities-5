@@ -7,18 +7,21 @@ import Offer from '../../pages/offer/offer.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Offers} from '../../types/offer.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {setOffers} from '../../store/action.ts';
+import {offersMock} from '../../mocks/offers_mock.ts';
 
-type AppProps = {
-  offers: Offers;
-};
 
-export default function App({ offers }: AppProps) {
+export default function App() {
+  const dispatch = useAppDispatch();
+  dispatch(setOffers(offersMock));
+  const offers = useAppSelector((state) => state.offers);
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Main offers={offers} />} />
+          <Route index element={<Main />} />
           <Route path={AppRoute.Login} element={<Login />} />
           <Route
             path={AppRoute.Favorites}

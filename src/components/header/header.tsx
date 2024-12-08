@@ -2,7 +2,7 @@ import {User} from '../../mocks/users.ts';
 import Logo from '../logo/logo.tsx';
 import {AppRoute} from '../../const.ts';
 import {Link} from 'react-router-dom';
-import {offers} from '../../mocks/offers.ts';
+import {offersMock} from '../../mocks/offers_mock.ts';
 
 export type HeaderProps = {
   user: User;
@@ -22,7 +22,7 @@ export default function Header({ user }: HeaderProps) {
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">{user.username}</span>
-                  <span className="header__favorite-count">{offers.filter((offer) => offer.isFavorite).length}
+                  <span className="header__favorite-count">{offersMock.filter((offer) => offer.isFavorite).length}
                   </span>
                 </Link>
               </li>
