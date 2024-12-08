@@ -52,7 +52,7 @@ export default function Map(props: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, selectedOffer]);
+  }, [offers, selectedOffer, city, map]);
 
   return (
     <section

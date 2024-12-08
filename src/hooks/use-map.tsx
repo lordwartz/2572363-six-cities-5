@@ -1,6 +1,7 @@
 import {MutableRefObject, useEffect, useRef, useState} from 'react';
 import {Map, TileLayer} from 'leaflet';
 import {City} from '../types/map.ts';
+import {COPYRIGHT, TILE_LAYER_TEMPLATE} from '../const.ts';
 
 export default function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
@@ -10,29 +11,31 @@ export default function useMap(
   const isRenderedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (mapRef.current !== null && !isRenderedRef.current) {
-      const instance = new Map(mapRef.current, {
-        center: {
-          lat: city.lat,
-          lng: city.lng
-        },
-        zoom: 10
-      });
+    if (mapRef.current !== null) {
+      if(!isRenderedRef.current){
+        const instance = new Map(mapRef.current, {
+          center: {
+            lat: city.lat,
+            lng: city.lng
+          },
+          zoom: city.zoom,
+        });
 
-      const layer = new TileLayer(
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        }
-      );
+        const layer = new TileLayer(
+          TILE_LAYER_TEMPLATE,
+          {
+            attribution: COPYRIGHT
+          }
+        );
 
-      instance.addLayer(layer);
-
-      setMap(instance);
-      isRenderedRef.current = true;
+        instance.addLayer(layer);
+        setMap(instance);
+        isRenderedRef.current = true;
+      } else {
+        map?.setView({ lat: city.lat, lng: city.lng }, city.zoom);
+      }
     }
-  }, [mapRef, city]);
+  }, [city, map, mapRef]);
 
   return map;
 }

@@ -8,7 +8,7 @@ export type LocationProps = {
 export function Location({location, handleClick}: LocationProps) {
   return (
     <li className="locations__item">
-      <a className="locations__item-link tabs__item" href="#" onClick={() => handleClick()}>
+      <a className="locations__item-link tabs__item" onClick={() => handleClick()}>
         <span>{location.title}</span>
       </a>
     </li>
