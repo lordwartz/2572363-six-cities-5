@@ -3,7 +3,7 @@ import {Offers} from '../types/offer.ts';
 import {SortOption} from '../components/sort-options/sort-option.ts';
 
 export const getOffersByCity = (cityName: string, offers: Offers) =>
-  offers.filter((offer) => offer.city === cityName);
+  offers.filter((offer) => offer.city.title === cityName);
 
 export const sortOffers = (offers: Offers, sortOption: SortOption) => {
   const sortedOffers = [...offers];
@@ -11,10 +11,10 @@ export const sortOffers = (offers: Offers, sortOption: SortOption) => {
     case SortOption.Popular:
       break;
     case SortOption.PriceLowToHigh:
-      sortedOffers.sort((a, b) => a.pricePerNight - b.pricePerNight);
+      sortedOffers.sort((a, b) => a.price - b.price);
       break;
     case SortOption.PriceHighToLow:
-      sortedOffers.sort((a, b) => b.pricePerNight - a.pricePerNight);
+      sortedOffers.sort((a, b) => b.price - a.price);
       break;
     case SortOption.TopRatedFirst:
       sortedOffers.sort((a, b) => b.rating - a.rating);

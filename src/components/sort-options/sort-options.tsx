@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import {Offers} from '../../types/offer.ts';
 import {useState} from 'react';
-import {sortOffers} from '../../app/offers.api.ts';
+import {sortOffers} from '../../api/offers.api.ts';
 import {SortOption} from './sort-option.ts';
 
 type SortOptionsProps = {

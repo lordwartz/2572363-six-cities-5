@@ -1,9 +1,11 @@
 import {Reviews} from './review.ts';
 import {Amenities} from './amenities.ts';
+import {City} from './map.ts';
 
 export type Coordinates = {
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
+  zoom: number;
 };
 
 export enum OfferType {
@@ -14,16 +16,16 @@ export enum OfferType {
 }
 
 export type Offer = {
-  id: number;
-  image: string;
+  id: string;
+  previewImage: string;
   isPremium: boolean;
-  pricePerNight: number;
+  price: number;
   title: string;
   type: OfferType;
   isFavorite: boolean;
   rating: number;
-  city: string;
-  coordinates: Coordinates;
+  city: City;
+  location: Coordinates;
 };
 
 export type DetailedOffer = Offer & {

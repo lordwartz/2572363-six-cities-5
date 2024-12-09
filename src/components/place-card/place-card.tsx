@@ -23,13 +23,13 @@ export function PlaceCard({ offer, handleHovered } : PlaceCardProps) {
 
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={offerLink}>
-          <img className="place-card__image" src={offer.image} width="260" height="200" alt="Place image"/>
+          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image"/>
         </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.pricePerNight}</b>
+            <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className="place-card__bookmark-button button" type="button">

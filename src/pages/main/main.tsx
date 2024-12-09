@@ -6,12 +6,13 @@ import { user } from '../../mocks/users.ts';
 import { useEffect, useState } from 'react';
 import { Locations } from '../../components/location/location.tsx';
 import Map from '../../components/map/map.tsx';
-import { citiesMock } from '../../mocks/citiesMock.ts';
+import { cities } from '../../mocks/cities.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCity } from '../../store/action.ts';
-import {getOffersByCity, sortOffers} from '../../app/offers.api.ts';
+import {getOffersByCity, sortOffers} from '../../api/offers.api.ts';
 import SortOptions from '../../components/sort-options/sort-options.tsx';
 import {SortOption} from '../../components/sort-options/sort-option.ts';
+import LoadingScreen from '../loading-screen/loading-screen.tsx';
 
 
 export default function Main() {
@@ -22,16 +23,23 @@ export default function Main() {
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [offersToShow, setOffersToShow] = useState<Offer[]>(currentOffers);
   const [activeSortOption, setActiveSortOption] = useState<SortOption>(SortOption.Popular);
+  const isDataLoading = useAppSelector((state) => state.isDataLoading);
 
   useEffect(() => {
     const sortedOffers = sortOffers(currentOffers, activeSortOption);
     setOffersToShow(sortedOffers);
-  }, [city, activeSortOption, currentOffers]);
+  }, [city, activeSortOption, offers]);
 
   const handleSort = (sortedOffers: Offers, sortOption: SortOption) => {
     setOffersToShow(sortedOffers);
     setActiveSortOption(sortOption);
   };
+
+  if (isDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <section>
@@ -44,7 +52,7 @@ export default function Main() {
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <Locations locations={citiesMock} handleClick={(selectedCity) => dispatch(setCity(selectedCity))} />
+              <Locations locations={cities} handleClick={(selectedCity) => dispatch(setCity(selectedCity))} />
             </section>
           </div>
           <div className="cities">
