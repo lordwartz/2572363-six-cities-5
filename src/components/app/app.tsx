@@ -7,14 +7,10 @@ import Offer from '../../pages/offer/offer.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {setOffers} from '../../store/action.ts';
-import {offersMock} from '../../mocks/offers_mock.ts';
+import {useAppSelector} from '../../hooks';
 
 
 export default function App() {
-  const dispatch = useAppDispatch();
-  dispatch(setOffers(offersMock));
   const offers = useAppSelector((state) => state.offers);
 
   return (

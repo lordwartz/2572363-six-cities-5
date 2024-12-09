@@ -35,8 +35,8 @@ export default function Map(props: MapProps) {
       const markerLayer = layerGroup().addTo(map);
       offers.forEach((offer) => {
         const marker = new Marker({
-          lat: offer.coordinates.lat,
-          lng: offer.coordinates.lng
+          lat: offer.location.latitude,
+          lng: offer.location.longitude
         });
 
         marker

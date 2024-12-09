@@ -10,8 +10,7 @@ import CommentForm from '../../components/comment-form/comment-form.tsx';
 export default function Offer() {
   const { id } = useParams();
 
-  const parsedId = parseInt(id!, 10);
-  const currentOffer = offersMock.find((offer) => offer.id === parsedId);
+  const currentOffer = offersMock.find((offer) => offer.id === id);
 
   if (!currentOffer) {
     return <NotFound/>;
@@ -82,7 +81,7 @@ export default function Offer() {
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{currentOffer?.pricePerNight}</b>
+                <b className="offer__price-value">&euro;{currentOffer?.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">

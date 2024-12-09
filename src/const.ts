@@ -22,3 +22,11 @@ export const CURRENT_MARKER = 'img/pin-active.svg';
 export const TILE_LAYER_TEMPLATE = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
 export const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+export enum APIRoute {
+  Offers = '/offers',
+  Offer = `${Offers}/:offerId`,
+  OffersNearby = `${Offer}/nearby`,
+  Login = '/login',
+  Logout = '/logout'
+}

@@ -1,6 +1,6 @@
 import {City} from '../types/map.ts';
 
-export const citiesMock: City[] = [
+export const cities: City[] = [
   {
     title: 'Paris',
     lat: 48.8566,
