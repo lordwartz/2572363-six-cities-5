@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import Main from '../../pages/main/main.tsx';
 import Login from '../../pages/login/login.tsx';
-import Offer from '../../pages/offer/offer.tsx';
+import OfferPage from '../../pages/offer/offerPage.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
@@ -29,7 +29,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-          <Route path={AppRoute.Offer} element={<Offer />} />
+          <Route path={AppRoute.Offer} element={<OfferPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

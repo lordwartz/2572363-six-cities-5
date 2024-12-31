@@ -28,5 +28,6 @@ export enum APIRoute {
   Offer = `${Offers}/:offerId`,
   OffersNearby = `${Offer}/nearby`,
   Login = '/login',
-  Logout = '/logout'
+  Logout = '/logout',
+  Comments = '/comments'
 }
