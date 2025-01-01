@@ -1,8 +1,6 @@
 import {Helmet} from 'react-helmet-async';
 import {PlaceCardsList} from '../../components/place-card/place-card.tsx';
 import {Offers} from '../../types/offer.ts';
-import Header from '../../components/header/header.tsx';
-import {user} from '../../mocks/users.ts';
 
 export type FavoritesProps = {
   offers: Offers;
@@ -14,7 +12,6 @@ export default function Favorites({offers}: FavoritesProps) {
       <Helmet>
         <title>6 cities. Favorites</title>
       </Helmet>
-      <Header user={user}/>
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">

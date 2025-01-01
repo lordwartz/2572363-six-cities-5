@@ -2,12 +2,10 @@ import {Helmet} from 'react-helmet-async';
 import {useParams} from 'react-router-dom';
 import {offersMock} from '../../mocks/offers_mock.ts';
 import NotFound from '../not-found/not-found.tsx';
-import Header from '../../components/header/header.tsx';
-import {user} from '../../mocks/users.ts';
 import {NearPlaces} from '../../components/near-places/near-places.tsx';
 import CommentForm from '../../components/comment-form/comment-form.tsx';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getComments, getOffer} from '../../store/api-actions.ts';
+import {fetchComments, fetchOffer} from '../../store/api-actions.ts';
 import {useEffect, useState} from 'react';
 import {DetailedOffer} from '../../types/offer.ts';
 import {Comments} from '../../types/comment.ts';
@@ -22,12 +20,12 @@ export default function OfferPage() {
 
   useEffect(() => {
     if (id) {
-      dispatch(getOffer(id))
+      dispatch(fetchOffer(id))
         .unwrap()
         .then((offer) => {
           setCurrentOffer(offer);
         });
-      dispatch(getComments(id))
+      dispatch(fetchComments(id))
         .unwrap()
         .then((comments) => {
           setCurrentComments(comments);
@@ -113,7 +111,6 @@ export default function OfferPage() {
       <Helmet>
         <title>6 cities. Offer</title>
       </Helmet>
-      <Header user={user}/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">

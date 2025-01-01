@@ -3,33 +3,32 @@ import {AxiosInstance} from 'axios';
 import {AppDispatch, State} from '../types/state.ts';
 import {DetailedOffer, Offers} from '../types/offer.ts';
 import {APIRoute, AuthorizationStatus} from '../const.ts';
-import {loadOffers, requireAuthorization, setOffersDataLoadingStatus} from './action.ts';
-import {UserData} from '../types/user-data.ts';
-import {AuthData} from '../types/auth-data.ts';
+import {clearUserData, setOffers, requireAuthorization, setOffersDataLoadingStatus, setUserData} from './action.ts';
+import {AuthData, LoginResponse} from '../types/authorization.ts';
 import {dropToken, saveToken} from '../services/token.ts';
 import {Comments} from '../types/comment.ts';
+import {User} from '../types/user.ts';
 
-export const fetchOffersAction = createAsyncThunk<void, undefined, {
+export const fetchOffers = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchOffers',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(requireAuthorization(AuthorizationStatus.Authorized));
     dispatch(setOffersDataLoadingStatus(true));
     const {data} = await api.get<Offers>(APIRoute.Offers);
-    dispatch(loadOffers(data));
     dispatch(setOffersDataLoadingStatus(false));
+    dispatch(setOffers(data));
   },
 );
 
-export const getOffer = createAsyncThunk<DetailedOffer, string, {
+export const fetchOffer = createAsyncThunk<DetailedOffer, string, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
-  'data/getOffer',
+  'data/fetchOffer',
   async (id, {dispatch, extra: api}) => {
     dispatch(setOffersDataLoadingStatus(true));
     const {data} = await api.get<DetailedOffer>(`${APIRoute.Offers}/${id}`);
@@ -38,12 +37,12 @@ export const getOffer = createAsyncThunk<DetailedOffer, string, {
   }
 );
 
-export const getComments = createAsyncThunk<Comments, string, {
+export const fetchComments = createAsyncThunk<Comments, string, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
-  'data/getOffer',
+  'data/fetchComments',
   async (id, {dispatch, extra: api}) => {
     dispatch(setOffersDataLoadingStatus(true));
     const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
@@ -51,6 +50,20 @@ export const getComments = createAsyncThunk<Comments, string, {
     return data;
   }
 );
+
+export const fetchFavorites = createAsyncThunk<Offers, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+  }>(
+    'data/fetchFavorites',
+    async (_arg, {dispatch, extra: api}) => {
+      dispatch(setOffersDataLoadingStatus(true));
+      const {data} = await api.get<Offers>(APIRoute.Favorites);
+      dispatch(setOffersDataLoadingStatus(false));
+      return data;
+    }
+  );
 
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
@@ -60,7 +73,8 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   'user/checkAuth',
   async (_arg, {dispatch, extra: api}) => {
     try {
-      await api.get(APIRoute.Login);
+      const {data} = await api.get<User>(APIRoute.Login);
+      dispatch(setUserData(data));
       dispatch(requireAuthorization(AuthorizationStatus.Authorized));
     } catch {
       dispatch(requireAuthorization(AuthorizationStatus.Unauthorized));
@@ -75,9 +89,11 @@ export const loginAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/login',
   async ({login: email, password}, {dispatch, extra: api}) => {
-    const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
-    saveToken(token);
+    const {data} = await api.post<LoginResponse>(APIRoute.Login, {email, password});
+    saveToken(data.token);
     dispatch(requireAuthorization(AuthorizationStatus.Authorized));
+    dispatch(setUserData({
+      name: data.name, email: data.email, isPro: data.isPro, avatarUrl: data.avatarUrl}));
   },
 );
 
@@ -91,6 +107,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(requireAuthorization(AuthorizationStatus.Unauthorized));
+    dispatch(clearUserData());
   },
 );
 

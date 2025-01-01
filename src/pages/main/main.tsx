@@ -1,8 +1,6 @@
 import { PlaceCardsList } from '../../components/place-card/place-card.tsx';
 import { Helmet } from 'react-helmet-async';
 import { Offer, Offers } from '../../types/offer.ts';
-import Header from '../../components/header/header.tsx';
-import { user } from '../../mocks/users.ts';
 import { useEffect, useState } from 'react';
 import { Locations } from '../../components/location/location.tsx';
 import Map from '../../components/map/map.tsx';
@@ -13,6 +11,7 @@ import { sortOffers } from '../../api/offers.api.ts';
 import SortOptions from '../../components/sort-options/sort-options.tsx';
 import { SortOption } from '../../components/sort-options/sort-option.ts';
 import LoadingScreen from '../loading-screen/loading-screen.tsx';
+import {fetchOffers} from '../../store/api-actions.ts';
 
 export default function Main() {
   const dispatch = useAppDispatch();
@@ -22,6 +21,10 @@ export default function Main() {
   const [activeOffer, setActiveOffer] = useState<Offer | undefined>(undefined);
   const [activeSortOption, setActiveSortOption] = useState<SortOption>(SortOption.Popular);
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
+
+  useEffect(() => {
+    dispatch(fetchOffers());
+  }, [dispatch]);
 
   useEffect(() => {
     const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
@@ -44,7 +47,6 @@ export default function Main() {
       <Helmet>
         <title>6 cities</title>
       </Helmet>
-      <Header user={user} />
       <div className="page page--gray page--main">
         <main className="page__main page__main--index">
           <h1 className="visually-hidden">Cities</h1>

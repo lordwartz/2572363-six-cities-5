@@ -1,4 +1,4 @@
-import {User} from './User.ts';
+import {User} from './user.ts';
 
 export type Comment = {
   id: string;

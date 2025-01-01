@@ -1,15 +1,23 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {loadOffers, requireAuthorization, setCity, setOffersDataLoadingStatus} from './action.ts';
+import {
+  clearUserData,
+  setOffers,
+  requireAuthorization,
+  setCity,
+  setOffersDataLoadingStatus, setUserData
+} from './action.ts';
 import {cities} from '../mocks/cities.ts';
 import {Offers} from '../types/offer.ts';
 import {City} from '../types/map.ts';
 import {AuthorizationStatus} from '../const.ts';
+import {User} from '../types/user.ts';
 
 type InitialState = {
   city: City;
   offers: Offers;
   authorizationStatus: AuthorizationStatus;
   isDataLoading: boolean;
+  user: User | undefined;
 }
 
 const initialState: InitialState = {
@@ -17,13 +25,14 @@ const initialState: InitialState = {
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: false,
+  user: undefined,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder.addCase(setCity, (state, action) => {
     state.city = action.payload;
   });
-  builder.addCase(loadOffers, (state, action) => {
+  builder.addCase(setOffers, (state, action) => {
     state.offers = action.payload;
   });
   builder.addCase(requireAuthorization, (state, action) => {
@@ -31,5 +40,11 @@ export const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(setOffersDataLoadingStatus,(state, action) => {
     state.isDataLoading = action.payload;
+  });
+  builder.addCase(clearUserData, (state) => {
+    state.user = undefined;
+  });
+  builder.addCase(setUserData, (state, action) => {
+    state.user = action.payload;
   });
 });
