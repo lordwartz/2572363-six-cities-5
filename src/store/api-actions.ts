@@ -3,7 +3,7 @@ import {AxiosInstance} from 'axios';
 import {AppDispatch, State} from '../types/state.ts';
 import {DetailedOffer, Offers} from '../types/offer.ts';
 import {APIRoute, AuthorizationStatus} from '../const.ts';
-import {clearUserData, setOffers, requireAuthorization, setOffersDataLoadingStatus, setUserData} from './action.ts';
+import {clearUserData, setOffers, requireAuthorization, setUserData} from './action.ts';
 import {AuthData, LoginResponse} from '../types/authorization.ts';
 import {dropToken, saveToken} from '../services/token.ts';
 import {Comment, Comments} from '../types/comment.ts';
@@ -16,10 +16,12 @@ export const fetchOffers = createAsyncThunk<void, undefined, {
 }>(
   'data/fetchOffers',
   async (_arg, {dispatch, extra: api}) => {
-    dispatch(setOffersDataLoadingStatus(true));
-    const {data} = await api.get<Offers>(APIRoute.Offers);
-    dispatch(setOffersDataLoadingStatus(false));
-    dispatch(setOffers(data));
+    try {
+      const {data} = await api.get<Offers>(APIRoute.Offers);
+      dispatch(setOffers(data));
+    } catch (e) {
+      dispatch(setOffers([]));
+    }
   },
 );
 
@@ -29,10 +31,8 @@ export const fetchOffer = createAsyncThunk<DetailedOffer, string, {
   extra: AxiosInstance;
 }>(
   'data/fetchOffer',
-  async (id, {dispatch, extra: api}) => {
-    dispatch(setOffersDataLoadingStatus(true));
-    const {data} = await api.get<DetailedOffer>(`${APIRoute.Offers}/${id}`);
-    dispatch(setOffersDataLoadingStatus(false));
+  async (offerId, { extra: api }) => {
+    const { data } = await api.get<DetailedOffer>(`${APIRoute.Offers}/${offerId}`);
     return data;
   }
 );
@@ -43,11 +43,13 @@ export const fetchComments = createAsyncThunk<Comments, string, {
   extra: AxiosInstance;
 }>(
   'data/fetchComments',
-  async (id, {dispatch, extra: api}) => {
-    dispatch(setOffersDataLoadingStatus(true));
-    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
-    dispatch(setOffersDataLoadingStatus(false));
-    return data;
+  async (id, {extra: api}) => {
+    try{
+      const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
+      return data;
+    } catch (e) {
+      return [];
+    }
   }
 );
 
@@ -57,11 +59,13 @@ export const fetchFavorites = createAsyncThunk<Offers, undefined, {
   extra: AxiosInstance;
   }>(
     'data/fetchFavorites',
-    async (_arg, {dispatch, extra: api}) => {
-      dispatch(setOffersDataLoadingStatus(true));
-      const {data} = await api.get<Offers>(APIRoute.Favorites);
-      dispatch(setOffersDataLoadingStatus(false));
-      return data;
+    async (_arg, {extra: api}) => {
+      try {
+        const {data} = await api.get<Offers>(APIRoute.Favorites);
+        return data;
+      } catch (e) {
+        return [];
+      }
     }
   );
 

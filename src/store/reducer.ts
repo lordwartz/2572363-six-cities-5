@@ -4,7 +4,7 @@ import {
   setOffers,
   requireAuthorization,
   setCity,
-  setOffersDataLoadingStatus, setUserData
+  setDataLoadingStatus, setUserData
 } from './action.ts';
 import {cities} from '../mocks/cities.ts';
 import {Offers} from '../types/offer.ts';
@@ -38,7 +38,7 @@ export const reducer = createReducer(initialState, (builder) => {
   builder.addCase(requireAuthorization, (state, action) => {
     state.authorizationStatus = action.payload;
   });
-  builder.addCase(setOffersDataLoadingStatus,(state, action) => {
+  builder.addCase(setDataLoadingStatus,(state, action) => {
     state.isDataLoading = action.payload;
   });
   builder.addCase(clearUserData, (state) => {

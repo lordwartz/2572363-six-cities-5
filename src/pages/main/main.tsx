@@ -6,7 +6,7 @@ import { Locations } from '../../components/location/location.tsx';
 import Map from '../../components/map/map.tsx';
 import { cities } from '../../mocks/cities.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setCity } from '../../store/action.ts';
+import {setCity, setDataLoadingStatus} from '../../store/action.ts';
 import { sortOffers } from '../../api/offers.api.ts';
 import SortOptions from '../../components/sort-options/sort-options.tsx';
 import { SortOption } from '../../components/sort-options/sort-option.ts';
@@ -23,7 +23,9 @@ export default function Main() {
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
 
   useEffect(() => {
+    dispatch(setDataLoadingStatus(true));
     dispatch(fetchOffers());
+    dispatch(setDataLoadingStatus(false));
   }, [dispatch]);
 
   useEffect(() => {
