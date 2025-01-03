@@ -10,28 +10,30 @@ import {useEffect, useState} from 'react';
 import {DetailedOffer} from '../../types/offer.ts';
 import {Comments} from '../../types/comment.ts';
 import {capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth} from '../../services/utils.tsx';
+import {AuthorizationStatus} from '../../const.ts';
 
 export default function OfferPage() {
   const [currentOffer, setCurrentOffer] = useState<DetailedOffer | undefined>(undefined);
   const [currentComments, setCurrentComments] = useState<Comments>([]);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
-  const {id} = useParams();
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const {id: offerId} = useParams();
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchOffer(id))
+    if (offerId) {
+      dispatch(fetchOffer(offerId))
         .unwrap()
         .then((offer) => {
           setCurrentOffer(offer);
         });
-      dispatch(fetchComments(id))
+      dispatch(fetchComments(offerId))
         .unwrap()
         .then((comments) => {
           setCurrentComments(comments);
         });
     }
-  }, [dispatch, id]);
+  }, [dispatch, offerId]);
 
   if (isDataLoading) {
     return <div>Loading...</div>;
@@ -176,7 +178,9 @@ export default function OfferPage() {
               </div>
               <section className="offer__reviews reviews">
                 {reviews}
-                <CommentForm/>
+                {authorizationStatus === AuthorizationStatus.Authorized ?
+                  <CommentForm offerId={offerId!}/> :
+                  null}
               </section>
             </div>
           </div>

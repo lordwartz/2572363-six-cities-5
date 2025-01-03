@@ -6,7 +6,7 @@ import {APIRoute, AuthorizationStatus} from '../const.ts';
 import {clearUserData, setOffers, requireAuthorization, setOffersDataLoadingStatus, setUserData} from './action.ts';
 import {AuthData, LoginResponse} from '../types/authorization.ts';
 import {dropToken, saveToken} from '../services/token.ts';
-import {Comments} from '../types/comment.ts';
+import {Comment, Comments} from '../types/comment.ts';
 import {User} from '../types/user.ts';
 
 export const fetchOffers = createAsyncThunk<void, undefined, {
@@ -111,3 +111,13 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   },
 );
 
+export const sendComment = createAsyncThunk<void, [Comment, string], {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'offer/sendComment',
+  async ([request, offerId], {extra: api}) => {
+    await api.post(`${APIRoute.Comments}/${offerId}`, request);
+  }
+);
