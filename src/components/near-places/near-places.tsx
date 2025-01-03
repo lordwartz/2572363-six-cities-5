@@ -44,13 +44,11 @@ export function NearPlace({ offer }: NearPlaceProps) {
 }
 
 export type NearPlacesProps = {
-  currentOffer: Offer;
   offers: Offers;
 };
 
-export function NearPlaces({ currentOffer, offers }: NearPlacesProps) {
-  const places = offers.filter((offer) => offer.id !== currentOffer.id)
-    .map((offer) => <NearPlace key={offer.id} offer={offer}/>);
+export function NearPlaces({ offers }: NearPlacesProps) {
+  const places = offers.map((offer) => <NearPlace key={offer.id} offer={offer}/>);
 
   return (
     <section className="near-places places">

@@ -66,7 +66,7 @@ export default function Main() {
                 <PlaceCardsList offers={currentOffers} handleOfferHovered={(selectedOffer) => setActiveOffer(selectedOffer)} />
               </section>
               <div className="cities__right-section">
-                <Map city={city} selectedOffer={activeOffer} offers={currentOffers} />
+                <Map city={city} selectedOffer={activeOffer} offers={currentOffers} classname='cities__map' />
               </div>
             </div>
           </div>

@@ -69,6 +69,22 @@ export const fetchFavorites = createAsyncThunk<Offers, undefined, {
     }
   );
 
+export const fetchNearbyOffers = createAsyncThunk<Offers, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchNearbyOffers',
+  async (offerId, {extra: api}) => {
+    try {
+      const {data} = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/${APIRoute.NearbyPostfix}`);
+      return data;
+    } catch (e) {
+      return [];
+    }
+  }
+);
+
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
   state: State;

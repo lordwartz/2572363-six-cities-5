@@ -1,10 +1,10 @@
 import 'leaflet/dist/leaflet.css';
-import {useEffect, useRef} from 'react';
-import {Icon, layerGroup, Marker} from 'leaflet';
+import { useEffect, useRef } from 'react';
+import { Icon, layerGroup, Marker } from 'leaflet';
 import useMap from '../../hooks/use-map.tsx';
-import {City} from '../../types/map.ts';
-import {CURRENT_MARKER, DEFAULT_MARKER} from '../../const.ts';
-import {Offer, Offers} from '../../types/offer.ts';
+import { City } from '../../types/map.ts';
+import { CURRENT_MARKER, DEFAULT_MARKER } from '../../const.ts';
+import { Offer, Offers } from '../../types/offer.ts';
 
 const defaultCustomIcon = new Icon({
   iconUrl: DEFAULT_MARKER,
@@ -22,23 +22,19 @@ type MapProps = {
   city: City;
   offers: Offers;
   selectedOffer: Offer | undefined;
+  classname?: string;
 };
 
 export default function Map(props: MapProps) {
-  const {city, offers, selectedOffer} = props;
-
+  const { city, offers, selectedOffer, classname } = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
   useEffect(() => {
-    if (map !== null) {
+    if (map) {
       const markerLayer = layerGroup().addTo(map);
       offers.forEach((offer) => {
-        const marker = new Marker({
-          lat: offer.location.latitude,
-          lng: offer.location.longitude
-        });
-
+        const marker = new Marker([offer.location.latitude, offer.location.longitude]);
         marker
           .setIcon(
             selectedOffer !== undefined && offer.id === selectedOffer.id
@@ -56,8 +52,9 @@ export default function Map(props: MapProps) {
 
   return (
     <section
-      style={{height: '500px'}}
-      className="cities__map map"
+      style={{ height: '500px' }}
+      className={`map ${classname ?? ''}`}
       ref={mapRef}
-    />);
+    />
+  );
 }

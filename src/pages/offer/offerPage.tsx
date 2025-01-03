@@ -1,27 +1,31 @@
 import {Helmet} from 'react-helmet-async';
 import {useParams} from 'react-router-dom';
-import {offersMock} from '../../mocks/offers_mock.ts';
 import NotFound from '../not-found/not-found.tsx';
 import {NearPlaces} from '../../components/near-places/near-places.tsx';
 import CommentForm from '../../components/comment-form/comment-form.tsx';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchComments, fetchOffer} from '../../store/api-actions.ts';
+import {fetchComments, fetchNearbyOffers, fetchOffer} from '../../store/api-actions.ts';
 import {useEffect, useState} from 'react';
-import {DetailedOffer} from '../../types/offer.ts';
+import {DetailedOffer, Offers} from '../../types/offer.ts';
 import {Comments} from '../../types/comment.ts';
 import {capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth} from '../../services/utils.tsx';
 import {AuthorizationStatus} from '../../const.ts';
+import Map from '../../components/map/map.tsx';
+import {setDataLoadingStatus} from '../../store/action.ts';
 
 export default function OfferPage() {
   const [currentOffer, setCurrentOffer] = useState<DetailedOffer | undefined>(undefined);
   const [currentComments, setCurrentComments] = useState<Comments>([]);
+  const [nearbyOffers, setNearbyOffers] = useState<Offers>([]);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const city = useAppSelector((state) => state.city);
   const {id: offerId} = useParams();
 
   useEffect(() => {
     if (offerId) {
+      dispatch(setDataLoadingStatus(true));
       dispatch(fetchOffer(offerId))
         .unwrap()
         .then((offer) => {
@@ -32,6 +36,12 @@ export default function OfferPage() {
         .then((comments) => {
           setCurrentComments(comments);
         });
+      dispatch(fetchNearbyOffers(offerId))
+        .unwrap()
+        .then((offers) => {
+          setNearbyOffers(offers.slice(0, 3));
+        });
+      dispatch(setDataLoadingStatus(false));
     }
   }, [dispatch, offerId]);
 
@@ -184,10 +194,10 @@ export default function OfferPage() {
               </section>
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <Map city={city} selectedOffer={currentOffer} offers={nearbyOffers.concat(currentOffer)} classname='offer__map' />
         </section>
         <div className="container">
-          <NearPlaces currentOffer={currentOffer} offers={offersMock}/>
+          <NearPlaces offers={nearbyOffers}/>
         </div>
       </main>
     </div>
