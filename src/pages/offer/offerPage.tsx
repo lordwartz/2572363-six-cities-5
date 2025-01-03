@@ -17,6 +17,7 @@ export default function OfferPage() {
   const [currentOffer, setCurrentOffer] = useState<DetailedOffer | undefined>(undefined);
   const [currentComments, setCurrentComments] = useState<Comments>([]);
   const [nearbyOffers, setNearbyOffers] = useState<Offers>([]);
+  const [needFetchComments, setNeedFetchComments] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -44,6 +45,18 @@ export default function OfferPage() {
       dispatch(setDataLoadingStatus(false));
     }
   }, [dispatch, offerId]);
+
+  useEffect(() => {
+    if (offerId) {
+      dispatch(setDataLoadingStatus(true));
+      dispatch(fetchComments(offerId))
+        .unwrap()
+        .then((comments) => {
+          setCurrentComments(comments);
+        });
+      dispatch(setDataLoadingStatus(false));
+    }
+  }, [needFetchComments]);
 
   if (isDataLoading) {
     return <div>Loading...</div>;
@@ -189,7 +202,7 @@ export default function OfferPage() {
               <section className="offer__reviews reviews">
                 {reviews}
                 {authorizationStatus === AuthorizationStatus.Authorized ?
-                  <CommentForm offerId={offerId!}/> :
+                  <CommentForm offerId={offerId!} onSendComment={() => setNeedFetchComments(true)} /> :
                   null}
               </section>
             </div>

@@ -1,33 +1,47 @@
-import {ChangeEvent, FormEvent, useState} from 'react';
-import {useAppDispatch} from '../../hooks';
-import {sendComment} from '../../store/api-actions.ts';
-import {Comment} from '../../types/comment.ts';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { sendComment } from '../../store/api-actions.ts';
+import { Comment } from '../../types/comment.ts';
 
 export type CommentFormProps = {
+  onSendComment: () => void;
   offerId: string;
 };
 
-export default function CommentForm({ offerId }: CommentFormProps) {
+export default function CommentForm({ onSendComment, offerId }: CommentFormProps) {
   const dispatch = useAppDispatch();
   const [formState, setFormState] = useState<Comment>({
     comment: '',
     rating: 0,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormState({
       ...formState,
       [name]: name === 'rating' ? Number(value) : value,
     });
   };
 
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(sendComment([formState, offerId]));
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await dispatch(sendComment([formState, offerId])).unwrap();
+      setFormState({ comment: '', rating: 0 });
+    } catch (err) {
+      setError('Failed to send comment. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+      onSendComment();
+    }
   };
 
-  const isSubmitDisabled = formState.rating === 0 || formState.comment.length < 50;
+  const isSubmitDisabled = formState.rating === 0 || formState.comment.length < 50 || formState.comment.length > 300 || isSubmitting;
 
   return (
     <form
@@ -88,6 +102,7 @@ export default function CommentForm({ offerId }: CommentFormProps) {
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
+        {error && <p className="reviews__error">{error}</p>}
         <button className="reviews__submit form__submit button" type="submit" disabled={isSubmitDisabled}>Submit</button>
       </div>
     </form>
