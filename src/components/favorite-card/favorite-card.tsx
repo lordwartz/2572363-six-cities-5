@@ -21,7 +21,7 @@ export function FavoriteCard({ offer }: FavoriteCardProps) {
       dispatch(changeFavoriteState({ offerId: offer.id, isFavorite: isFavorite }));
       setIsChangedFavorite(false);
     }
-  }, [isChangedFavorite]);
+  }, [isChangedFavorite, dispatch, isFavorite, offer.id]);
 
   return (
     <article className="favorites__card place-card">

@@ -22,7 +22,7 @@ export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
       dispatch(changeFavoriteState({offerId: offer.id, isFavorite: isFavorite}));
       setIsChangedFavorite(false);
     }
-  }, [isChangedFavorite]);
+  }, [isChangedFavorite, dispatch, isFavorite, offer.id]);
 
   return (
     <article className="cities__card place-card"

@@ -25,13 +25,13 @@ export default function CommentForm({ onSendComment, offerId }: CommentFormProps
     });
   };
 
-  const handleFormSubmit = async (e: FormEvent) => {
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
-      await dispatch(sendComment([formState, offerId])).unwrap();
+      dispatch(sendComment([formState, offerId])).unwrap();
       setFormState({ comment: '', rating: 0 });
     } catch (err) {
       setError('Failed to send comment. Please try again later.');

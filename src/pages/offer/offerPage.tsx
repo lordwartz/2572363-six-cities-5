@@ -115,7 +115,7 @@ export default function OfferPage() {
           ))}
       </ul>
       {currentComments.length > 10 && !showAllComments && (
-        <button className="reviews__show-more" onClick={() => setShowAllComments(true)}>Show all</button>
+        <button className="button" onClick={() => setShowAllComments(true)}>Show all</button>
       )}
     </>
   );
