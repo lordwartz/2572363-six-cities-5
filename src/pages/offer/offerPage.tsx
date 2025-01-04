@@ -90,28 +90,30 @@ export default function OfferPage() {
     <>
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span></h2>
       <ul className="reviews__list">
-        {currentComments.slice(0, showAllComments ? currentComments.length : 10).map((comment) => (
-          <li key={comment.id} className="reviews__item">
-            <div className="reviews__user user">
-              <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                <img className="reviews__avatar user__avatar" src={comment.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
-              </div>
-              <span className="reviews__user-name">
-                {comment.user.name}
-              </span>
-            </div>
-            <div className="reviews__info">
-              <div className="reviews__rating rating">
-                <div className="reviews__stars rating__stars">
-                  <span style={{ width: toStarsWidth(comment.rating) }}></span>
-                  <span className="visually-hidden">Rating</span>
+        {currentComments
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, showAllComments ? currentComments.length : 10).map((comment) => (
+            <li key={comment.id} className="reviews__item">
+              <div className="reviews__user user">
+                <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                  <img className="reviews__avatar user__avatar" src={comment.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
                 </div>
+                <span className="reviews__user-name">
+                  {comment.user.name}
+                </span>
               </div>
-              {splitTextIntoParagraphs(comment.comment, 'reviews__text')}
-              <time className="reviews__time" dateTime={formatDate(comment.date).dateTime}>{formatDate(comment.date).formattedDate}</time>
-            </div>
-          </li>
-        ))}
+              <div className="reviews__info">
+                <div className="reviews__rating rating">
+                  <div className="reviews__stars rating__stars">
+                    <span style={{ width: toStarsWidth(comment.rating) }}></span>
+                    <span className="visually-hidden">Rating</span>
+                  </div>
+                </div>
+                {splitTextIntoParagraphs(comment.comment, 'reviews__text')}
+                <time className="reviews__time" dateTime={formatDate(comment.date).dateTime}>{formatDate(comment.date).formattedDate}</time>
+              </div>
+            </li>
+          ))}
       </ul>
       {currentComments.length > 10 && !showAllComments && (
         <button className="reviews__show-more" onClick={() => setShowAllComments(true)}>Show all</button>
