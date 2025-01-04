@@ -1,6 +1,6 @@
 import {Goods} from './goods.ts';
 import {City} from './map.ts';
-import {User} from './User.ts';
+import {User} from './user.ts';
 
 export type Coordinates = {
   latitude: number;

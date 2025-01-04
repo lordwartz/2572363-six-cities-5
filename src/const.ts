@@ -25,9 +25,9 @@ export const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyrigh
 
 export enum APIRoute {
   Offers = '/offers',
-  Offer = `${Offers}/:offerId`,
-  OffersNearby = `${Offer}/nearby`,
+  NearbyPostfix = 'nearby',
   Login = '/login',
   Logout = '/logout',
-  Comments = '/comments'
+  Comments = '/comments',
+  Favorites = '/favorite',
 }

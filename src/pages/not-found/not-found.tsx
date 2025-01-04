@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import {AppRoute} from '../../const.ts';
 
 export default function NotFound() {
-  //todo. Проработать страницу
   return (
     <>
       <Helmet>

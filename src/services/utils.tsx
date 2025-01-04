@@ -22,4 +22,4 @@ export const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const toStarsWidth = (rating: number): string => `${rating * 20}%`;
+export const toStarsWidth = (rating: number): string => `${Math.round(rating) * 20}%`;
