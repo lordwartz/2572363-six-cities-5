@@ -1,7 +1,6 @@
 import Logo from '../logo/logo.tsx';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {Link} from 'react-router-dom';
-import {offersMock} from '../../mocks/offers_mock.ts';
 import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {logoutAction} from '../../store/api-actions.ts';
@@ -13,6 +12,7 @@ export type HeaderProps = {
 export default function Header({ user }: HeaderProps) {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const favoriteOffersCount = useAppSelector((state) => state.favoritesCount);
 
   const onLogoutClickHandle = () => {
     dispatch(logoutAction());
@@ -33,7 +33,7 @@ export default function Header({ user }: HeaderProps) {
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
                     <span className="header__user-name user__name">{user.name}</span>
-                    <span className="header__favorite-count">{offersMock.filter((offer) => offer.isFavorite).length}
+                    <span className="header__favorite-count">{favoriteOffersCount}
                     </span>
                   </Link>
                 </li>

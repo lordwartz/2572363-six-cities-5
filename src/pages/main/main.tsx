@@ -11,7 +11,7 @@ import { sortOffers } from '../../api/offers.api.ts';
 import SortOptions from '../../components/sort-options/sort-options.tsx';
 import { SortOption } from '../../components/sort-options/sort-option.ts';
 import LoadingScreen from '../loading-screen/loading-screen.tsx';
-import {fetchOffers} from '../../store/api-actions.ts';
+import { fetchOffers } from '../../store/api-actions.ts';
 
 export default function Main() {
   const dispatch = useAppDispatch();
@@ -63,7 +63,10 @@ export default function Main() {
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{currentOffers.length} places to stay in {city.name}</b>
                 <SortOptions onSort={handleSort} activeSortOption={activeSortOption} />
-                <PlaceCardsList offers={currentOffers} handleOfferHovered={(selectedOffer) => setActiveOffer(selectedOffer)} />
+                <PlaceCardsList
+                  offers={currentOffers}
+                  handleOfferHovered={(selectedOffer) => setActiveOffer(selectedOffer)}
+                />
               </section>
               <div className="cities__right-section">
                 <Map city={city} selectedOffer={activeOffer} offers={currentOffers} classname='cities__map' />

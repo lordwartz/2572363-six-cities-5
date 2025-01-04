@@ -9,9 +9,9 @@ import { useEffect, useState } from 'react';
 import { DetailedOffer, Offers } from '../../types/offer.ts';
 import { Comments } from '../../types/comment.ts';
 import { capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth } from '../../services/utils.tsx';
-import { AuthorizationStatus } from '../../const.ts';
 import Map from '../../components/map/map.tsx';
 import { setDataLoadingStatus } from '../../store/action.ts';
+import PrivateElement from '../../hocs/private-element/private-element.tsx';
 
 export default function OfferPage() {
   const [currentOffer, setCurrentOffer] = useState<DetailedOffer | undefined>(undefined);
@@ -21,7 +21,6 @@ export default function OfferPage() {
   const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const city = useAppSelector((state) => state.city);
   const { id: offerId } = useParams();
 
@@ -148,12 +147,19 @@ export default function OfferPage() {
                 <h1 className="offer__name">
                   {currentOffer.title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">To bookmarks</span>
-                </button>
+                <PrivateElement>
+                  <button className={`button offer__bookmark-button ${currentOffer.isFavorite ? 'offer__bookmark-button--active' : ''}`}
+                    type="button"
+                    onClick={() => {
+                      setCurrentOffer({...currentOffer, isFavorite: !currentOffer.isFavorite});
+                    }}
+                  >
+                    <svg className="offer__bookmark-icon" width="31" height="33">
+                      <use xlinkHref="#icon-bookmark"></use>
+                    </svg>
+                    <span className="visually-hidden">To bookmarks</span>
+                  </button>
+                </PrivateElement>
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
@@ -200,9 +206,9 @@ export default function OfferPage() {
               </div>
               <section className="offer__reviews reviews">
                 {reviews}
-                {authorizationStatus === AuthorizationStatus.Authorized ? (
+                <PrivateElement>
                   <CommentForm offerId={offerId!} onSendComment={() => setNeedFetchComments(true)} />
-                ) : null}
+                </PrivateElement>
               </section>
             </div>
           </div>

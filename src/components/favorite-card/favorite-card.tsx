@@ -1,46 +1,41 @@
-import { Offer, Offers } from '../../types/offer.ts';
-import { Link } from 'react-router-dom';
+import { Offer } from '../../types/offer.ts';
+import { useAppDispatch } from '../../hooks';
 import { useEffect, useState } from 'react';
 import { changeFavoriteState } from '../../store/api-actions.ts';
-import { useAppDispatch } from '../../hooks';
+import { Link } from 'react-router-dom';
 import { capitalizeFirstLetter, toStarsWidth } from '../../services/utils.tsx';
 import PrivateElement from '../../hocs/private-element/private-element.tsx';
 
-export type PlaceCardProps = {
+export type FavoriteCardProps = {
   offer: Offer;
-  handleHovered: (offer: Offer) => void;
 };
 
-export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
+export function FavoriteCard({ offer }: FavoriteCardProps) {
   const dispatch = useAppDispatch();
   const [isFavorite, setIsFavorite] = useState<boolean>(offer.isFavorite);
   const [isChangedFavorite, setIsChangedFavorite] = useState<boolean>(false);
   const offerLink = `/offer/${offer.id}`;
 
   useEffect(() => {
-    if (isChangedFavorite){
-      dispatch(changeFavoriteState({offerId: offer.id, isFavorite: isFavorite}));
+    if (isChangedFavorite) {
+      dispatch(changeFavoriteState({ offerId: offer.id, isFavorite: isFavorite }));
       setIsChangedFavorite(false);
     }
   }, [isChangedFavorite]);
 
   return (
-    <article className="cities__card place-card"
-      onMouseEnter={() => {
-        handleHovered(offer);
-      }}
-    >
+    <article className="favorites__card place-card">
       {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className="favorites__image-wrapper place-card__image-wrapper">
         <Link to={offerLink}>
-          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image"/>
+          <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt="Place image" />
         </Link>
       </div>
-      <div className="place-card__info">
+      <div className="favorites__card-info place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{offer.price}</b>
@@ -64,7 +59,7 @@ export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: toStarsWidth(offer.rating)}} />
+            <span style={{ width: toStarsWidth(offer.rating) }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -74,23 +69,5 @@ export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
         <p className="place-card__type">{capitalizeFirstLetter(offer.type)}</p>
       </div>
     </article>
-  );
-}
-
-type OffersListProps = {
-  offers: Offers;
-  handleOfferHovered: (offer: Offer) => void;
-}
-
-export function PlaceCardsList({offers, handleOfferHovered }: OffersListProps) {
-  return (
-    <div className="cities__places-list places__list tabs__content">
-      {offers.map((offer) => (
-        <PlaceCard key={offer.id}
-          offer={offer}
-          handleHovered={(selectedOffer) => handleOfferHovered(selectedOffer)}
-        />
-      ))}
-    </div>
   );
 }

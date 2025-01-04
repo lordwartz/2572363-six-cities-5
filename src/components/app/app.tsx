@@ -6,13 +6,10 @@ import Login from '../../pages/login/login.tsx';
 import OfferPage from '../../pages/offer/offerPage.tsx';
 import NotFound from '../../pages/not-found/not-found.tsx';
 import Favorites from '../../pages/favorites/favorites.tsx';
-import PrivateRoute from '../private-route/private-route.tsx';
-import { useAppSelector } from '../../hooks';
+import PrivateRoute from '../../hocs/private-route/private-route.tsx';
 import Layout from '../layout/layout.tsx';
 
 export default function App() {
-  const offers = useAppSelector((state) => state.offers);
-
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -23,7 +20,7 @@ export default function App() {
               path={AppRoute.Favorites}
               element={
                 <PrivateRoute>
-                  <Favorites offers={offers.filter((offer) => offer.isFavorite)} />
+                  <Favorites />
                 </PrivateRoute>
               }
             />

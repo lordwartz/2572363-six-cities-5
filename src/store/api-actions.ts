@@ -3,7 +3,7 @@ import {AxiosInstance} from 'axios';
 import {AppDispatch, State} from '../types/state.ts';
 import {DetailedOffer, Offers} from '../types/offer.ts';
 import {APIRoute, AuthorizationStatus} from '../const.ts';
-import {clearUserData, setOffers, requireAuthorization, setUserData} from './action.ts';
+import {clearUserData, setOffers, requireAuthorization, setUserData, setFavoritesCount} from './action.ts';
 import {AuthData, LoginResponse} from '../types/authorization.ts';
 import {dropToken, saveToken} from '../services/token.ts';
 import {Comment, Comments} from '../types/comment.ts';
@@ -18,9 +18,12 @@ export const fetchOffers = createAsyncThunk<void, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<Offers>(APIRoute.Offers);
+      const favoritesCount = data.filter((offer) => offer.isFavorite).length;
       dispatch(setOffers(data));
+      dispatch(setFavoritesCount(favoritesCount));
     } catch (e) {
       dispatch(setOffers([]));
+      dispatch(setFavoritesCount(0));
     }
   },
 );
@@ -68,6 +71,24 @@ export const fetchFavorites = createAsyncThunk<Offers, undefined, {
       }
     }
   );
+
+export const changeFavoriteState = createAsyncThunk<void, {offerId: string; isFavorite: boolean}, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/changeFavoriteState',
+  async ({offerId, isFavorite}, {dispatch, getState, extra: api}) => {
+    try {
+      await api.post<DetailedOffer>(`${APIRoute.Favorites}/${offerId}/${Number(isFavorite)}`);
+      if (isFavorite) {
+        dispatch(setFavoritesCount(getState().favoritesCount + 1));
+      } else {
+        dispatch(setFavoritesCount(getState().favoritesCount - 1));
+      }
+    } catch (e) { /* empty */ }
+  }
+);
 
 export const fetchNearbyOffers = createAsyncThunk<Offers, string, {
   dispatch: AppDispatch;

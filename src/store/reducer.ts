@@ -4,7 +4,7 @@ import {
   setOffers,
   requireAuthorization,
   setCity,
-  setDataLoadingStatus, setUserData
+  setDataLoadingStatus, setUserData, setFavoritesCount
 } from './action.ts';
 import {cities} from '../mocks/cities.ts';
 import {Offers} from '../types/offer.ts';
@@ -18,14 +18,16 @@ type InitialState = {
   authorizationStatus: AuthorizationStatus;
   isDataLoading: boolean;
   user: User | undefined;
+  favoritesCount: number;
 }
 
 const initialState: InitialState = {
   city: cities[0],
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
-  isDataLoading: false,
+  isDataLoading: true,
   user: undefined,
+  favoritesCount: 0,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -46,5 +48,8 @@ export const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(setUserData, (state, action) => {
     state.user = action.payload;
+  });
+  builder.addCase(setFavoritesCount, (state, action) => {
+    state.favoritesCount = action.payload;
   });
 });

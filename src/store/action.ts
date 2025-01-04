@@ -17,3 +17,5 @@ export const authorizeUser = createAction<User>('user/authorize');
 export const clearUserData = createAction('user/clearData');
 
 export const setUserData = createAction<User>('user/setData');
+
+export const setFavoritesCount = createAction<number>('user/setFavoritesCount');
