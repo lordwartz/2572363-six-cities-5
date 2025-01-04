@@ -41,7 +41,7 @@ export default function Map(props: MapProps) {
 
         marker
           .setIcon(
-            selectedOffer !== undefined && offer.title === selectedOffer.title
+            selectedOffer !== undefined && offer.id === selectedOffer.id
               ? currentCustomIcon
               : defaultCustomIcon
           )

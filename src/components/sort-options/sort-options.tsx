@@ -1,22 +1,18 @@
 import cn from 'classnames';
-import {Offers} from '../../types/offer.ts';
 import {useState} from 'react';
-import {sortOffers} from '../../api/offers.api.ts';
 import {SortOption} from './sort-option.ts';
 
 type SortOptionsProps = {
-  offers: Offers;
-  onSort: (sortedOffers: Offers, sortOption: SortOption) => void;
+  onSort: (sortOption: SortOption) => void;
   activeSortOption: SortOption;
 }
 
 export default function SortOptions(props: SortOptionsProps) {
-  const {offers, onSort, activeSortOption} = props;
+  const {onSort, activeSortOption} = props;
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   const handleOptionClick = (sortOption: SortOption) => {
-    const sortedOffers = sortOffers(offers, sortOption);
-    onSort(sortedOffers, sortOption);
+    onSort(sortOption);
     setIsOptionsOpen(false);
   };
 

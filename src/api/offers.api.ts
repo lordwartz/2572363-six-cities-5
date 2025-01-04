@@ -2,9 +2,6 @@ import {Offers} from '../types/offer.ts';
 
 import {SortOption} from '../components/sort-options/sort-option.ts';
 
-export const getOffersByCity = (cityName: string, offers: Offers) =>
-  offers.filter((offer) => offer.city.title === cityName);
-
 export const sortOffers = (offers: Offers, sortOption: SortOption) => {
   const sortedOffers = [...offers];
   switch (sortOption) {

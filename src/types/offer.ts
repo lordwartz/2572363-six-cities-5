@@ -1,6 +1,6 @@
-import {Reviews} from './review.ts';
-import {Amenities} from './amenities.ts';
+import {Goods} from './goods.ts';
 import {City} from './map.ts';
+import {User} from './User.ts';
 
 export type Coordinates = {
   latitude: number;
@@ -9,10 +9,10 @@ export type Coordinates = {
 };
 
 export enum OfferType {
-  Apartment = 'apartment',
-  Room = 'room',
-  House = 'house',
-  Hotel = 'hotel',
+  Apartment = 'Apartment',
+  Room = 'Room',
+  House = 'House',
+  Hotel = 'Hotel',
 }
 
 export type Offer = {
@@ -29,12 +29,12 @@ export type Offer = {
 };
 
 export type DetailedOffer = Offer & {
-  reviews: Reviews;
   images: string[];
   description: string;
-  bedroomsCount: number;
-  naxCapacity: number;
-  amenities: Amenities;
+  bedrooms: number;
+  maxAdults: number;
+  goods: Goods;
+  host: User;
 }
 
 export type Offers = Offer[];

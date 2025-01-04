@@ -1,8 +1,8 @@
-export enum Amenitie {
+export enum Good {
   Wifi= 'Wi-fi',
   Heating = 'Heating',
   Kitchen = 'Kitchen',
   CableTV = 'Cable-TV',
 }
 
-export type Amenities = Amenitie[];
+export type Goods = Good[];

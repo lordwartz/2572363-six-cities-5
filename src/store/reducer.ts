@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {loadOffers, requireAuthorization, setCity} from './action.ts';
+import {loadOffers, requireAuthorization, setCity, setOffersDataLoadingStatus} from './action.ts';
 import {cities} from '../mocks/cities.ts';
 import {Offers} from '../types/offer.ts';
 import {City} from '../types/map.ts';
@@ -28,5 +28,8 @@ export const reducer = createReducer(initialState, (builder) => {
   });
   builder.addCase(requireAuthorization, (state, action) => {
     state.authorizationStatus = action.payload;
+  });
+  builder.addCase(setOffersDataLoadingStatus,(state, action) => {
+    state.isDataLoading = action.payload;
   });
 });
