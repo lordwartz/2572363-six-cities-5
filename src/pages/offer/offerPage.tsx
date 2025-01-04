@@ -1,76 +1,74 @@
-import {Helmet} from 'react-helmet-async';
-import {useParams} from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router-dom';
 import NotFound from '../not-found/not-found.tsx';
-import {NearPlaces} from '../../components/near-places/near-places.tsx';
+import { NearPlaces } from '../../components/near-places/near-places.tsx';
 import CommentForm from '../../components/comment-form/comment-form.tsx';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchComments, fetchNearbyOffers, fetchOffer} from '../../store/api-actions.ts';
-import {useEffect, useState} from 'react';
-import {DetailedOffer, Offers} from '../../types/offer.ts';
-import {Comments} from '../../types/comment.ts';
-import {capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth} from '../../services/utils.tsx';
-import {AuthorizationStatus} from '../../const.ts';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchComments, fetchNearbyOffers, fetchOffer } from '../../store/api-actions.ts';
+import { useEffect, useState } from 'react';
+import { DetailedOffer, Offers } from '../../types/offer.ts';
+import { Comments } from '../../types/comment.ts';
+import { capitalizeFirstLetter, formatDate, splitTextIntoParagraphs, toStarsWidth } from '../../services/utils.tsx';
+import { AuthorizationStatus } from '../../const.ts';
 import Map from '../../components/map/map.tsx';
-import {setDataLoadingStatus} from '../../store/action.ts';
+import { setDataLoadingStatus } from '../../store/action.ts';
 
 export default function OfferPage() {
   const [currentOffer, setCurrentOffer] = useState<DetailedOffer | undefined>(undefined);
   const [currentComments, setCurrentComments] = useState<Comments>([]);
   const [nearbyOffers, setNearbyOffers] = useState<Offers>([]);
   const [needFetchComments, setNeedFetchComments] = useState<boolean>(false);
+  const [showAllComments, setShowAllComments] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isDataLoading = useAppSelector((state) => state.isDataLoading);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const city = useAppSelector((state) => state.city);
-  const {id: offerId} = useParams();
+  const { id: offerId } = useParams();
 
   useEffect(() => {
     if (offerId) {
       dispatch(setDataLoadingStatus(true));
-      dispatch(fetchOffer(offerId))
-        .unwrap()
-        .then((offer) => {
-          setCurrentOffer(offer);
-        });
-      dispatch(fetchComments(offerId))
-        .unwrap()
-        .then((comments) => {
-          setCurrentComments(comments);
-        });
-      dispatch(fetchNearbyOffers(offerId))
-        .unwrap()
-        .then((offers) => {
-          setNearbyOffers(offers.slice(0, 3));
-        });
-      dispatch(setDataLoadingStatus(false));
+      Promise.all([
+        dispatch(fetchOffer(offerId)).unwrap(),
+        dispatch(fetchComments(offerId)).unwrap(),
+        dispatch(fetchNearbyOffers(offerId)).unwrap(),
+      ]).then(([offer, comments, offers]) => {
+        setCurrentOffer(offer);
+        setCurrentComments(comments);
+        setNearbyOffers(offers.slice(0, 3));
+        dispatch(setDataLoadingStatus(false));
+      }).catch(() => {
+        dispatch(setDataLoadingStatus(false));
+      });
     }
   }, [dispatch, offerId]);
 
   useEffect(() => {
-    if (offerId) {
+    if (needFetchComments && offerId) {
       dispatch(setDataLoadingStatus(true));
       dispatch(fetchComments(offerId))
         .unwrap()
         .then((comments) => {
           setCurrentComments(comments);
+          dispatch(setDataLoadingStatus(false));
         });
-      dispatch(setDataLoadingStatus(false));
+      setNeedFetchComments(false);
     }
-  }, [needFetchComments]);
+  }, [needFetchComments, dispatch, offerId]);
 
   if (isDataLoading) {
     return <div>Loading...</div>;
   }
 
   if (!currentOffer) {
-    return <NotFound/>;
+    return <NotFound />;
   }
 
   const premiumMark = currentOffer.isPremium ? (
     <div className="offer__mark">
       <span>Premium</span>
-    </div>)
-    : null;
+    </div>
+  ) : null;
 
   const offerInside = (
     <ul className="offer__inside-list">
@@ -90,16 +88,13 @@ export default function OfferPage() {
 
   const reviews = (
     <>
-      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span>
-      </h2>
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{currentComments.length}</span></h2>
       <ul className="reviews__list">
-        {currentComments.map((comment) => (
+        {currentComments.slice(0, showAllComments ? currentComments.length : 10).map((comment) => (
           <li key={comment.id} className="reviews__item">
             <div className="reviews__user user">
               <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                <img className="reviews__avatar user__avatar" src={comment.user.avatarUrl} width="54" height="54"
-                  alt="Reviews avatar"
-                />
+                <img className="reviews__avatar user__avatar" src={comment.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
               </div>
               <span className="reviews__user-name">
                 {comment.user.name}
@@ -108,7 +103,7 @@ export default function OfferPage() {
             <div className="reviews__info">
               <div className="reviews__rating rating">
                 <div className="reviews__stars rating__stars">
-                  <span style={{width: toStarsWidth(comment.rating)}}></span>
+                  <span style={{ width: toStarsWidth(comment.rating) }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>
@@ -118,6 +113,9 @@ export default function OfferPage() {
           </li>
         ))}
       </ul>
+      {currentComments.length > 10 && !showAllComments && (
+        <button className="reviews__show-more" onClick={() => setShowAllComments(true)}>Show all</button>
+      )}
     </>
   );
 
@@ -125,7 +123,7 @@ export default function OfferPage() {
     <div className="offer__gallery">
       {currentOffer.images.map((imageUrl) => (
         <div key={imageUrl} className="offer__image-wrapper">
-          <img className="offer__image" src={imageUrl} alt="Photo studio"/>
+          <img className="offer__image" src={imageUrl} alt="Photo studio" />
         </div>
       ))}
     </div>
@@ -157,7 +155,7 @@ export default function OfferPage() {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: toStarsWidth(currentOffer.rating)}}></span>
+                  <span style={{ width: toStarsWidth(currentOffer.rating) }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{currentOffer.rating}</span>
@@ -185,32 +183,31 @@ export default function OfferPage() {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="offer__avatar user__avatar" src={currentOffer.host.avatarUrl} width="74" height="74"
-                      alt="Host avatar"
-                    />
+                    <img className="offer__avatar user__avatar" src={currentOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
                     {currentOffer.host.name}
                   </span>
                   {currentOffer.host.isPro ? (
                     <span className="offer__user-status">
-                    Pro
-                    </span>) : null}
+                      Pro
+                    </span>
+                  ) : null}
                 </div>
                 {offerDescription}
               </div>
               <section className="offer__reviews reviews">
                 {reviews}
-                {authorizationStatus === AuthorizationStatus.Authorized ?
-                  <CommentForm offerId={offerId!} onSendComment={() => setNeedFetchComments(true)} /> :
-                  null}
+                {authorizationStatus === AuthorizationStatus.Authorized ? (
+                  <CommentForm offerId={offerId!} onSendComment={() => setNeedFetchComments(true)} />
+                ) : null}
               </section>
             </div>
           </div>
           <Map city={city} selectedOffer={currentOffer} offers={nearbyOffers.concat(currentOffer)} classname='offer__map' />
         </section>
         <div className="container">
-          <NearPlaces offers={nearbyOffers}/>
+          <NearPlaces offers={nearbyOffers} />
         </div>
       </main>
     </div>
