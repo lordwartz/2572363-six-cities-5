@@ -1,4 +1,5 @@
 import {City} from '../../types/map.ts';
+import {useAppSelector} from '../../hooks';
 
 export type LocationProps = {
   location: City;
@@ -6,9 +7,11 @@ export type LocationProps = {
 }
 
 export function Location({location, handleClick}: LocationProps) {
+  const selectedCity = useAppSelector((state) => state.city);
+  const isCurrentSelected = selectedCity.name === location.name;
   return (
     <li className="locations__item">
-      <a className="locations__item-link tabs__item" onClick={() => handleClick()}>
+      <a className={`locations__item-link tabs__item ${isCurrentSelected ? 'tabs__item--active' : ''}`} onClick={() => handleClick()}>
         <span>{location.name}</span>
       </a>
     </li>
