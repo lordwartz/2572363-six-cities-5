@@ -15,6 +15,7 @@ import { fetchOffers } from '../../store/api-actions.ts';
 
 export default function Main() {
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const city = useAppSelector((state) => state.city);
   const offers = useAppSelector((state) => state.offers);
   const [currentOffers, setCurrentOffers] = useState<Offers>([]);
@@ -26,7 +27,7 @@ export default function Main() {
     dispatch(setDataLoadingStatus(true));
     dispatch(fetchOffers());
     dispatch(setDataLoadingStatus(false));
-  }, [dispatch]);
+  }, [dispatch, authorizationStatus]);
 
   useEffect(() => {
     const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
