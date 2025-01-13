@@ -1,13 +1,13 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {AxiosInstance} from 'axios';
-import {AppDispatch, State} from '../types/state.ts';
-import {DetailedOffer, Offers} from '../types/offer.ts';
-import {APIRoute, AuthorizationStatus} from '../const.ts';
-import {clearUserData, setOffers, requireAuthorization, setUserData, setFavoritesCount} from './action.ts';
-import {AuthData, LoginResponse} from '../types/authorization.ts';
-import {dropToken, dropUser, getToken, getUser, saveToken, saveUser} from '../services/localStorage.ts';
-import {Comment, Comments} from '../types/comment.ts';
-import {User} from '../types/user.ts';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosInstance } from 'axios';
+import { AppDispatch, State } from '../types/state.ts';
+import { DetailedOffer, Offers } from '../types/offer.ts';
+import { APIRoute, AuthorizationStatus } from '../const.ts';
+import { clearUserData, setOffers, requireAuthorization, setUserData, setFavoritesCount } from './action.ts';
+import { AuthData, LoginResponse } from '../types/authorization.ts';
+import { dropToken, dropUser, getToken, getUser, saveToken, saveUser } from '../services/localStorage.ts';
+import { Comment, Comments } from '../types/comment.ts';
+import { User } from '../types/user.ts';
 
 export const fetchOffers = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;

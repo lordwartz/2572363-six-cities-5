@@ -4,9 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import { checkAuthAction, loginAction } from '../../store/api-actions.ts';
 import Logo from '../../components/logo/logo.tsx';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { FormEvent, useEffect, useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const dispatch = useAppDispatch();

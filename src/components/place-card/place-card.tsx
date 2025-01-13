@@ -8,10 +8,10 @@ import PrivateButton from '../../hocs/private-button/private-button.tsx';
 
 export type PlaceCardProps = {
   offer: Offer;
-  handleHovered: (offer: Offer) => void;
+  onHovered: (offer: Offer) => void;
 };
 
-export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
+export function PlaceCard({ offer, onHovered }: PlaceCardProps) {
   const dispatch = useAppDispatch();
   const [isFavorite, setIsFavorite] = useState<boolean>(offer.isFavorite);
   const [isChangedFavorite, setIsChangedFavorite] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
   return (
     <article className="cities__card place-card"
       onMouseEnter={() => {
-        handleHovered(offer);
+        onHovered(offer);
       }}
     >
       {offer.isPremium && (
@@ -79,16 +79,16 @@ export function PlaceCard({ offer, handleHovered }: PlaceCardProps) {
 
 type OffersListProps = {
   offers: Offers;
-  handleOfferHovered: (offer: Offer) => void;
+  onOfferHovered: (offer: Offer) => void;
 }
 
-export function PlaceCardsList({offers, handleOfferHovered }: OffersListProps) {
+export function PlaceCardsList({offers, onOfferHovered }: OffersListProps) {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
         <PlaceCard key={offer.id}
           offer={offer}
-          handleHovered={(selectedOffer) => handleOfferHovered(selectedOffer)}
+          onHovered={(selectedOffer) => onOfferHovered(selectedOffer)}
         />
       ))}
     </div>

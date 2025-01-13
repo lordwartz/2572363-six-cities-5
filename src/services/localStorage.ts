@@ -1,4 +1,4 @@
-import {User} from '../types/user.ts';
+import { User } from '../types/user.ts';
 
 const AUTH_TOKEN_KEY_NAME = 'six-cities-token';
 const USER_KEY_NAME = 'user';
