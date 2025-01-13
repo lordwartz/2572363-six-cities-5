@@ -1,17 +1,19 @@
 import { Helmet } from 'react-helmet-async';
-import Logo from '../../components/logo/logo.tsx';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
-import { useNavigate } from 'react-router-dom';
 import { checkAuthAction, loginAction } from '../../store/api-actions.ts';
-import {FormEvent, useEffect, useState} from 'react';
+import Logo from '../../components/logo/logo.tsx';
+import {toast, ToastContainer} from 'react-toastify';
+import { FormEvent, useEffect, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authStatus = useAppSelector((state) => state.authorizationStatus);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
 
   useEffect(() => {
     dispatch(checkAuthAction());
@@ -23,9 +25,19 @@ export default function Login() {
     }
   }, [authStatus, navigate]);
 
-  const handleSubmit = (e: FormEvent) => {
+  function isPasswordValid(pass: string) {
+    return /^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]+$/.test(pass);
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(loginAction({ login: email, password: password }));
+
+    if (!isPasswordValid(currentPassword)){
+      toast.error('Password must contain at least one letter and one number.');
+      return;
+    }
+
+    dispatch(loginAction({ login: currentEmail, password: currentPassword }));
   };
 
   return (
@@ -56,8 +68,8 @@ export default function Login() {
                   name="email"
                   placeholder="Email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={currentEmail}
+                  onChange={(e) => setCurrentEmail(e.target.value)}
                 />
               </div>
               <div className="login__input-wrapper form__input-wrapper">
@@ -68,8 +80,8 @@ export default function Login() {
                   name="password"
                   placeholder="Password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">
@@ -86,6 +98,7 @@ export default function Login() {
           </section>
         </div>
       </main>
+      <ToastContainer />
     </div>
   );
 }
