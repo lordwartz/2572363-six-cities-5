@@ -14,7 +14,7 @@ export default function Header({ user, favoritesCount }: HeaderProps) {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
-  const onLogoutClickHandle = () => {
+  const handleLogoutClick = () => {
     dispatch(logoutAction());
   };
 
@@ -41,13 +41,13 @@ export default function Header({ user, favoritesCount }: HeaderProps) {
 
               <li className="header__nav-item">
                 {authorizationStatus === AuthorizationStatus.Authorized ?
-                  <Link className="header__nav-link" to={AppRoute.Login}>
-                    <span
+                  <div className="header__nav-link">
+                    <a
                       className="header__signout"
-                      onClick={onLogoutClickHandle}
+                      onClick={handleLogoutClick}
                     >Sign out
-                    </span>
-                  </Link> :
+                    </a>
+                  </div> :
                   <Link className="header__nav-link" to={AppRoute.Login}>
                     <span className="header__login">Log in</span>
                   </Link>}
