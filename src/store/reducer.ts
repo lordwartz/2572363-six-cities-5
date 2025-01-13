@@ -8,7 +8,7 @@ import {
 } from './action.ts';
 import { Offers } from '../types/offer.ts';
 import { City } from '../types/map.ts';
-import { AuthorizationStatus, CITIES } from '../const.ts';
+import { AuthorizationStatus, Cities } from '../const.ts';
 import { User } from '../types/user.ts';
 
 type InitialState = {
@@ -21,7 +21,7 @@ type InitialState = {
 }
 
 const initialState: InitialState = {
-  city: CITIES[0],
+  city: Cities[0],
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: true,

@@ -11,7 +11,7 @@ import SortOptions from '../../components/sort-options/sort-options.tsx';
 import { SortOption } from '../../components/sort-options/sort-option.ts';
 import LoadingScreen from '../loading-screen/loading-screen.tsx';
 import { fetchOffers } from '../../store/api-actions.ts';
-import { CITIES } from '../../const.ts';
+import { Cities } from '../../const.ts';
 
 export default function Main() {
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ export default function Main() {
           <h1 className="visually-hidden">Cities</h1>
           <div className="tabs">
             <section className="locations container">
-              <Locations locations={CITIES} onClick={(selectedCity) => dispatch(setCity(selectedCity))} />
+              <Locations locations={Cities} onClick={(selectedCity) => dispatch(setCity(selectedCity))} />
             </section>
           </div>
           <div className="cities">

@@ -30,7 +30,7 @@ export enum APIRoute {
   Favorites = '/favorite',
 }
 
-export const CITIES: City[] = [
+export const Cities: City[] = [
   {
     name: 'Paris',
     lat: 48.8566,

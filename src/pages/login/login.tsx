@@ -1,11 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { AppRoute, AuthorizationStatus } from '../../const.ts';
+import { AppRoute, AuthorizationStatus, Cities } from '../../const.ts';
 import { checkAuthAction, loginAction } from '../../store/api-actions.ts';
 import Logo from '../../components/logo/logo.tsx';
 import { toast, ToastContainer } from 'react-toastify';
 import { FormEvent, useEffect, useState } from 'react';
+import { setCity } from '../../store/action.ts';
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ export default function Login() {
   const authStatus = useAppSelector((state) => state.authorizationStatus);
   const [currentEmail, setCurrentEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
+  const randomCity = Cities[Math.floor(Math.random() * Cities.length)];
 
   useEffect(() => {
     dispatch(checkAuthAction());
@@ -37,6 +39,11 @@ export default function Login() {
     }
 
     dispatch(loginAction({ login: currentEmail, password: currentPassword }));
+  };
+
+  const handleRandomCityClick = () => {
+    dispatch(setCity(randomCity));
+    navigate(AppRoute.Main);
   };
 
   return (
@@ -90,8 +97,8 @@ export default function Login() {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
-                <span>Amsterdam</span>
+              <a className="locations__item-link" href="#" onClick={() => handleRandomCityClick()}>
+                <span>{randomCity.name}</span>
               </a>
             </div>
           </section>
